@@ -1034,4 +1034,40 @@ tr {
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1) !important;
 }
 
+/* ============================================================
+   Book Page Turn Transition (3D Page Flip Effect)
+   ============================================================ */
+.book-page-turn {
+  position: relative;
+  transform-origin: 0% 50%;
+  animation: bookPageTurn 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  backface-visibility: hidden;
+  will-change: transform, opacity, filter;
+}
+
+@keyframes bookPageTurn {
+  0% {
+    opacity: 0.2;
+    transform: perspective(1800px) rotateY(-8deg) translateX(12px) scale(0.995);
+    filter: brightness(0.92);
+  }
+  50% {
+    opacity: 0.9;
+    transform: perspective(1800px) rotateY(-2.5deg) translateX(4px) scale(0.998);
+    filter: brightness(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(1800px) rotateY(0deg) translateX(0) scale(1);
+    filter: brightness(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .book-page-turn {
+    animation: none !important;
+  }
+}
+
+
 

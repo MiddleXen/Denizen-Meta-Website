@@ -67,31 +67,47 @@ export const ASYNC_DEFERRABLE_COMMANDS: Record<string, string> = {
   sidebar: 'Deferrable per-player sidebar update',
 };
 
-// Object types where every tag is safe off the main thread
+// Object types where every tag is safe off the main thread (both full ObjectType and constructor base)
 export const ASYNC_SAFE_ALL_OBJECT_TYPES = new Set<string>([
-  'biometag',
-  'plugintag',
-  'tradetag',
-  'binarytag',
-  'colortag',
-  'customobjecttag',
-  'durationtag',
-  'elementtag',
-  'imagetag',
-  'javareflectedobjecttag',
-  'listtag',
-  'maptag',
-  'quaterniontag',
-  'queuetag',
-  'scripttag',
-  'secrettag',
-  'timetag',
+  'biometag', 'biome',
+  'plugintag', 'plugin',
+  'tradetag', 'trade',
+  'binarytag', 'binary',
+  'colortag', 'color',
+  'customobjecttag', 'custom_object',
+  'durationtag', 'duration',
+  'elementtag', 'element',
+  'imagetag', 'image',
+  'javareflectedobjecttag', 'reflected',
+  'listtag', 'list', 'list_single',
+  'maptag', 'map',
+  'quaterniontag', 'quaternion',
+  'queuetag', 'queue',
+  'scripttag', 'script',
+  'secrettag', 'secret',
+  'timetag', 'time',
+  // Queue & script execution memory tags
+  'definition', 'def', 'context', 'entry', 'proc', 'static', 'tern',
+]);
+
+// Minecraft color and formatting codes that evaluate statically off-thread
+export const COLOR_FORMATTING_TAGS = new Set<string>([
+  'aqua', 'black', 'blue', 'bold', 'dark_aqua', 'dark_blue', 'dark_gray',
+  'dark_green', 'dark_purple', 'dark_red', 'gold', 'gray', 'green', 'italic',
+  'light_purple', 'magic', 'red', 'reset', 'strikethrough', 'underline', 'white', 'yellow',
+  '&0', '&1', '&2', '&3', '&4', '&5', '&6', '&7', '&8', '&9',
+  '&a', '&b', '&c', '&d', '&e', '&f', '&k', '&l', '&m', '&n', '&o', '&r',
+  '&nl', '&sp', '&nbsp', '&ss', '&at', '&sq', '&dq', '&co', '&sc', '&cm',
+  '&chr', '&pc', '&perc', '&hash', '&lt', '&gt', '&lb', '&rb', '&lc', '&rc',
+  '&bs', '&fs', '&pipe', '&tilde', '&dash', '&dot', '&colon', '&semi',
 ]);
 
 // Types that are safe with minor exceptions
 export const ASYNC_UNSAFE_EXCEPTIONS: Record<string, Set<string>> = {
   enchantmenttag: new Set(['full_name', 'can_enchant']),
+  enchantment: new Set(['full_name', 'can_enchant']),
   materialtag: new Set(['is_enabled']),
+  material: new Set(['is_enabled']),
 };
 
 // Object types with specific sub-tags marked safe off-thread
@@ -261,14 +277,68 @@ export interface TagAsyncInfo {
   descriptionText: string;
 }
 
+// Tag bases that require live server lookups (e.g. <world[...]> or <entity[...]>)
+export const MAIN_THREAD_ONLY_BASES = new Set<string>([
+  'biome', 'biometag',
+  'chunk', 'chunktag',
+  'cuboid', 'cuboidtag',
+  'ellipsoid', 'ellipsoidtag',
+  'enchantment', 'enchantmenttag',
+  'entity', 'entitytag',
+  'inventory', 'inventorytag',
+  'item', 'itemtag',
+  'plugin', 'plugintag',
+  'polygon', 'polygontag',
+  'trade', 'tradetag',
+  'world', 'worldtag',
+  'server', 'servertag',
+]);
+
 export function getTagAsyncStatus(cleanTagName: string, beforeDotRaw = '', afterDotRaw = ''): TagAsyncInfo {
   const cleanTag = cleanTagName.trim().toLowerCase();
   const beforeDot = (beforeDotRaw || (cleanTag.includes('.') ? cleanTag.split('.')[0] : cleanTag)).toLowerCase();
   const afterDot = (afterDotRaw || (cleanTag.includes('.') ? cleanTag.slice(beforeDot.length + 1) : '')).toLowerCase();
   const firstAttr = afterDot.split('.')[0].replace(/\[.*\]/g, '').trim();
 
-  // 1. Check if the type has ALL tags async safe
-  if (ASYNC_SAFE_ALL_OBJECT_TYPES.has(beforeDot)) {
+  // Normalize beforeDot so both 'color' and 'colortag', 'location' and 'locationtag' match
+  const typeKey = beforeDot.endsWith('tag') ? beforeDot : beforeDot + 'tag';
+  const baseKey = beforeDot.endsWith('tag') ? beforeDot.slice(0, -3) : beforeDot;
+
+  // 0. Base tags (e.g. <color[...]>, <element[...]>, <list[...]>, <red>, <bold>, <location[...]>)
+  if (beforeDot === 'base') {
+    const baseTarget = (firstAttr || cleanTag).replace(/\[.*\]/g, '').trim().toLowerCase();
+    const baseTargetType = baseTarget.endsWith('tag') ? baseTarget : baseTarget + 'tag';
+
+    if (MAIN_THREAD_ONLY_BASES.has(baseTarget) || MAIN_THREAD_ONLY_BASES.has(baseTargetType)) {
+      return {
+        isSafe: false,
+        badgeHtml: `<span class="badge-async-main inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-white/10">Main Thread Hand-Off</span>`,
+        descriptionText: `Reads live server state; automatically dispatched to the main thread when evaluated from an async queue.`,
+      };
+    }
+
+    return {
+      isSafe: true,
+      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-[#00efb2] border border-emerald-500/30">⚡ Async-Safe</span>`,
+      descriptionText: `Pure data constructor / static format: evaluates directly on the async worker thread (0ms latency, no main-thread hand-off).`,
+    };
+  }
+
+  // 1. Color and Minecraft text formatting code tags (e.g. <red>, <bold>, <&a>, <&nl>)
+  if (COLOR_FORMATTING_TAGS.has(cleanTag) || cleanTag.startsWith('&')) {
+    return {
+      isSafe: true,
+      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-[#00efb2] border border-emerald-500/30">⚡ Async-Safe</span>`,
+      descriptionText: `Pure static formatting code: evaluates directly on the async worker thread with 0ms latency.`,
+    };
+  }
+
+  // 2. Check if the type has ALL tags async safe (ColorTag, ElementTag, ListTag, MapTag, DurationTag, TimeTag, etc.)
+  if (
+    ASYNC_SAFE_ALL_OBJECT_TYPES.has(typeKey) ||
+    ASYNC_SAFE_ALL_OBJECT_TYPES.has(baseKey) ||
+    ASYNC_SAFE_ALL_OBJECT_TYPES.has(beforeDot)
+  ) {
     return {
       isSafe: true,
       badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-[#00efb2] border border-emerald-500/30">⚡ Async-Safe</span>`,
@@ -276,10 +346,10 @@ export function getTagAsyncStatus(cleanTagName: string, beforeDotRaw = '', after
     };
   }
 
-  // 2. Types with exceptions (EnchantmentTag, MaterialTag)
-  if (beforeDot in ASYNC_UNSAFE_EXCEPTIONS) {
-    const unsafeSet = ASYNC_UNSAFE_EXCEPTIONS[beforeDot];
-    if (unsafeSet.has(firstAttr)) {
+  // 3. Types with exceptions (EnchantmentTag, MaterialTag)
+  if (typeKey in ASYNC_UNSAFE_EXCEPTIONS || baseKey in ASYNC_UNSAFE_EXCEPTIONS) {
+    const unsafeSet = ASYNC_UNSAFE_EXCEPTIONS[typeKey] || ASYNC_UNSAFE_EXCEPTIONS[baseKey];
+    if (unsafeSet && unsafeSet.has(firstAttr)) {
       return {
         isSafe: false,
         badgeHtml: `<span class="badge-async-main inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-white/10">Main Thread Hand-Off</span>`,
@@ -293,20 +363,18 @@ export function getTagAsyncStatus(cleanTagName: string, beforeDotRaw = '', after
     };
   }
 
-  // 3. Types with safe sub-tags
-  if (beforeDot in ASYNC_SAFE_SUBTAGS) {
-    const safeSet = ASYNC_SAFE_SUBTAGS[beforeDot];
-    if (safeSet.has(firstAttr)) {
-      return {
-        isSafe: true,
-        badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-[#00efb2] border border-emerald-500/30">⚡ Async-Safe</span>`,
-        descriptionText: `Memory / cached field: safe off the main thread (0ms latency, thread-safe access).`,
-      };
-    }
+  // 4. Types with safe sub-tags (LocationTag, ItemTag, ChunkTag, CuboidTag, WorldTag, PlayerTag, etc.)
+  const subtagSet = ASYNC_SAFE_SUBTAGS[typeKey] || ASYNC_SAFE_SUBTAGS[baseKey];
+  if (subtagSet && subtagSet.has(firstAttr)) {
+    return {
+      isSafe: true,
+      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-[#00efb2] border border-emerald-500/30">⚡ Async-Safe</span>`,
+      descriptionText: `Memory / cached field: safe off the main thread (0ms latency, thread-safe access).`,
+    };
   }
 
-  // 4. Server static tags
-  if (beforeDot === 'server' || beforeDot === 'servertag') {
+  // 5. Server static tags
+  if (baseKey === 'server' || typeKey === 'servertag') {
     if (ASYNC_SAFE_SUBTAGS.servertag.has(firstAttr)) {
       return {
         isSafe: true,
@@ -316,9 +384,19 @@ export function getTagAsyncStatus(cleanTagName: string, beforeDotRaw = '', after
     }
   }
 
-  // 5. Util tags
-  if (beforeDot === 'util' || beforeDot === 'utiltag') {
-    if (UTIL_ASYNC_SAFE_TAGS.has(firstAttr) || firstAttr.startsWith('random') || firstAttr.startsWith('current')) {
+  // 6. Util tags
+  if (baseKey === 'util' || typeKey === 'utiltag') {
+    if (
+      UTIL_ASYNC_SAFE_TAGS.has(firstAttr) ||
+      firstAttr.startsWith('random') ||
+      firstAttr.startsWith('current') ||
+      firstAttr === 'pi' ||
+      firstAttr === 'tau' ||
+      firstAttr === 'e' ||
+      firstAttr === 'time_now' ||
+      firstAttr === 'linger_stats' ||
+      firstAttr === 'color_names'
+    ) {
       return {
         isSafe: true,
         badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-[#00efb2] border border-emerald-500/30">⚡ Async-Safe</span>`,
@@ -327,16 +405,16 @@ export function getTagAsyncStatus(cleanTagName: string, beforeDotRaw = '', after
     }
   }
 
-  // 6. Bare tag base check
-  if (!afterDot && BARE_SAFE_BASES.has(beforeDot)) {
+  // 7. Bare tag base / constructor check (e.g. <player>, <npc>, <location[...]>, <material[...]>)
+  if (!afterDot && (baseKey === 'location' || baseKey === 'material' || BARE_SAFE_BASES.has(baseKey) || BARE_SAFE_BASES.has(typeKey))) {
     return {
       isSafe: true,
-      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-[#00efb2] border border-emerald-500/30">⚡ Bare-Safe</span>`,
-      descriptionText: `The bare reference &lt;${beforeDot}&gt; hands back the queue's linked object without server hand-off.`,
+      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-[#00efb2] border border-emerald-500/30">⚡ Async-Safe</span>`,
+      descriptionText: `Evaluates directly on the async worker thread without main-thread hand-off.`,
     };
   }
 
-  // 7. Core mathematical or queue tags
+  // 8. Core mathematical or queue tags
   if (
     cleanTag.includes('async') ||
     cleanTag.startsWith('queue.') ||
