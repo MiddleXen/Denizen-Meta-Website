@@ -68,9 +68,9 @@
   html.theme-black, .theme-black {
     --bg-page: #000000;
     --text-page: #ffffff;
-    --text-muted: #8e8e93;
-    --link-color: #ffffff;
-    --link-hover: #e4e4e7;
+    --text-muted: #9ca3af;
+    --link-color: #00efb2;
+    --link-hover: #34d399;
     --card-bg: #09090b;
     --table-border: #1f1f23;
     --row-border: #161619;
@@ -79,29 +79,29 @@
     --code-border: #18181c;
     --jumbo-bg: #09090b;
     --input-bg: #09090b;
-    --flash-bg: rgba(255, 255, 255, 0.22);
+    --flash-bg: rgba(0, 239, 178, 0.25);
 
-    /* Icon Theme Variables (Pitch Black: Monochrome Platinum / Pure Silver) */
-    --icon-primary: #ffffff;
-    --icon-secondary: #d4d4d8;
+    /* Icon Theme Variables (Pitch Black: Vivid Emerald / Silver) */
+    --icon-primary: #00efb2;
+    --icon-secondary: #34d399;
     --icon-dark: #71717a;
-    --icon-accent: #ffffff;
-    --icon-glow: #e4e4e7;
-    --icon-glow-soft: #a1a1aa;
+    --icon-accent: #00efb2;
+    --icon-glow: #00efb2;
+    --icon-glow-soft: #34d399;
     --icon-screen-bg: #141416;
     --icon-screen-border: #27272a;
     --icon-stroke-dark: #3f3f46;
-    --icon-amber: #ffffff;
-    --icon-amber-dark: #a1a1aa;
-    --icon-discord: #ffffff;
+    --icon-amber: #fbbf24;
+    --icon-amber-dark: #d97706;
+    --icon-discord: #5865F2;
   }
 
   html.theme-graphite, .theme-graphite {
     --bg-page: #151516;
     --text-page: #f4f4f5;
     --text-muted: #a1a1aa;
-    --link-color: #f4f4f5;
-    --link-hover: #ffffff;
+    --link-color: #38bdf8;
+    --link-hover: #7dd3fc;
     --card-bg: #1e1e21;
     --table-border: #35373e;
     --row-border: #2c2d33;
@@ -110,7 +110,7 @@
     --code-border: #2c2d33;
     --jumbo-bg: #1e1e21;
     --input-bg: #18191c;
-    --flash-bg: rgba(255, 255, 255, 0.22);
+    --flash-bg: rgba(56, 189, 248, 0.25);
 
     /* Icon Theme Variables (Graphite: Slate / Steel Metallic) */
     --icon-primary: #cbd5e1;
@@ -168,45 +168,46 @@
    Authentic Denizen Script Syntax Highlighting Colors
    ============================================================ */
 
-/* Dark Theme Syntax - Exact original colors from colors_dark.css */
-.dark .script_comment_header { color: #FF0000; font-weight: bold; }
-.dark .script_comment_normal { color: #007700; font-style: italic; }
-.dark .script_comment_code { color: #DD5500; font-style: italic; }
-.dark .script_comment_todo { color: #FFFF00; font-weight: bold; }
-.dark .script_key { color: #1155FF; font-weight: 600; }
-.dark .script_key_inline { color: #1155FF; font-style: italic; }
-.dark .script_command { color: #DD99FF; font-style: italic; font-weight: 600; }
-.dark .script_quote_double { color: #77BBF5; }
-.dark .script_quote_single { color: #88DDFF; }
-.dark .script_tag { color: #AAAAAA; }
-.dark .script_tag_dot { color: #EEEEFF; font-weight: bold; }
-.dark .script_tag_param { color: #7777FF; }
-.dark .script_tag_param_bracket { color: #7777FF; font-weight: bold; }
-.dark .script_colon { color: #66CCFF; font-weight: bold; }
-.dark .script_bad_space { color: #FFFFFF; background-color: #440000; }
-.dark .script_normal { color: #FFFFFF; }
-.dark .script_def_name { color: #33CCFF; font-style: italic; }
+/* Dark Theme Syntax - High contrast, rich IDE coloring */
+.dark .script_comment_header { color: #f87171; font-weight: bold; }
+.dark .script_comment_normal { color: #4ade80; font-style: italic; }
+.dark .script_comment_code { color: #fb923c; font-style: italic; }
+.dark .script_comment_todo { color: #facc15; font-weight: bold; }
+.dark .script_key { color: #60a5fa; font-weight: 600; }
+.dark .script_key_inline { color: #60a5fa; font-style: italic; }
+.dark .script_command { color: #c084fc; font-style: italic; font-weight: 600; }
+.dark .script_quote_double { color: #93c5fd; }
+.dark .script_quote_single { color: #a5f3fc; }
+.dark .script_tag { color: #34d399; font-weight: 500; }
+.dark .script_tag_dot { color: #6ee7b7; font-weight: bold; }
+.dark .script_tag_param { color: #818cf8; }
+.dark .script_tag_param_bracket { color: #818cf8; font-weight: bold; }
+.dark .script_colon { color: #38bdf8; font-weight: bold; }
+.dark .script_bad_space { color: #FFFFFF; background-color: #7f1d1d; }
+.dark .script_normal { color: #f1f5f9; }
+.dark .script_def_name { color: #38bdf8; font-style: italic; }
 
-.dark .syntax_command { color: #DD99FF; font-weight: 600; }
-.dark .syntax_required { color: #7777FF; font-weight: bold; }
-.dark .syntax_optional { color: #77BBF5; }
-.dark .syntax_default { color: #55DDBB; font-style: italic; }
-.dark .syntax_fillable { color: #AAAAAA; }
-.dark .syntax_list { color: #EEEEFF; }
-.dark .syntax_colon { color: #66CCFF; font-weight: bold; }
+.dark .syntax_command { color: #c084fc; font-weight: 600; }
+.dark .syntax_required { color: #818cf8; font-weight: bold; }
+.dark .syntax_optional { color: #93c5fd; }
+.dark .syntax_default { color: #34d399; font-style: italic; }
+.dark .syntax_fillable { color: #cbd5e1; }
+.dark .syntax_list { color: #f1f5f9; }
+.dark .syntax_colon { color: #38bdf8; font-weight: bold; }
 .dark .doc_name { color: #00bc8c !important; font-weight: bold; font-size: 1.45rem; }
 .dark .doc_name:hover { color: #00efb2 !important; }
 .dark tr.table-primary a { color: #00bc8c !important; text-decoration: none; }
 .dark tr.table-primary a:hover { color: #00efb2 !important; text-decoration: underline; }
 
-.theme-black .doc_name,
-.theme-graphite .doc_name { color: #ffffff !important; font-weight: bold; font-size: 1.45rem; }
-.theme-black .doc_name:hover,
-.theme-graphite .doc_name:hover { color: #e4e4e7 !important; }
-.theme-black tr.table-primary a,
-.theme-graphite tr.table-primary a { color: #ffffff !important; text-decoration: none; }
-.theme-black tr.table-primary a:hover,
-.theme-graphite tr.table-primary a:hover { color: #e4e4e7 !important; text-decoration: underline; }
+.theme-black .doc_name { color: #00efb2 !important; font-weight: bold; font-size: 1.45rem; }
+.theme-black .doc_name:hover { color: #34d399 !important; }
+.theme-black tr.table-primary a { color: #00efb2 !important; text-decoration: none; }
+.theme-black tr.table-primary a:hover { color: #34d399 !important; text-decoration: underline; }
+
+.theme-graphite .doc_name { color: #38bdf8 !important; font-weight: bold; font-size: 1.45rem; }
+.theme-graphite .doc_name:hover { color: #7dd3fc !important; }
+.theme-graphite tr.table-primary a { color: #38bdf8 !important; text-decoration: none; }
+.theme-graphite tr.table-primary a:hover { color: #7dd3fc !important; text-decoration: underline; }
 
 /* Light Theme Syntax - Exact original colors from colors_light.css */
 :root:not(.dark) .script_comment_header { color: #CC0000; font-weight: bold; }
@@ -292,8 +293,12 @@ table td:nth-child(2) {
   font-weight: 600;
   vertical-align: top;
   border-right: 1px solid var(--row-border);
-  color: var(--text-muted);
+  color: #475569;
   user-select: none;
+}
+
+.dark .td-doc-key {
+  color: #94a3b8;
 }
 
 tr.table-primary {
@@ -669,8 +674,13 @@ tr {
 }
 
 .theme-black .td-doc-key {
-  border-right-color: #161619 !important;
-  color: #71717a !important;
+  border-right-color: #1a1a20 !important;
+  color: #cbd5e1 !important;
+}
+
+.theme-graphite .td-doc-key {
+  border-right-color: #27272a !important;
+  color: #e2e8f0 !important;
 }
 
 .theme-black tr.table-primary {
@@ -733,36 +743,11 @@ tr {
 }
 
 .theme-black .ambient-mesh {
-  background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(255, 255, 255, 0.04), transparent 70%) !important;
+  background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(0, 239, 178, 0.05), transparent 70%) !important;
 }
 
 .theme-graphite .ambient-mesh {
-  background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(255, 255, 255, 0.05), transparent 70%) !important;
-}
-
-.theme-black .text-\[\#00bc8c\],
-.theme-black .dark\:text-\[\#00bc8c\],
-.theme-black .text-emerald-400,
-.theme-black .text-emerald-500,
-.theme-black .text-emerald-600,
-.theme-graphite .text-\[\#00bc8c\],
-.theme-graphite .dark\:text-\[\#00bc8c\],
-.theme-graphite .text-emerald-400,
-.theme-graphite .text-emerald-500,
-.theme-graphite .text-emerald-600 {
-  color: #f4f4f5 !important;
-}
-
-.theme-black .bg-\[\#00bc8c\],
-.theme-black .dark\:bg-\[\#00bc8c\],
-.theme-black .bg-emerald-500,
-.theme-black .bg-emerald-600,
-.theme-graphite .bg-\[\#00bc8c\],
-.theme-graphite .dark\:bg-\[\#00bc8c\],
-.theme-graphite .bg-emerald-500,
-.theme-graphite .bg-emerald-600 {
-  background-color: #f4f4f5 !important;
-  color: #121214 !important;
+  background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(56, 189, 248, 0.05), transparent 70%) !important;
 }
 
 .theme-black .hover\:bg-emerald-500:hover,

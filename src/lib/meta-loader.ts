@@ -60,7 +60,7 @@ function addHtmlEndParts(obj: BaseMetaObject): string {
   if (obj.group) {
     res += tableLine('default text-muted', 'Group', obj.group, true);
   }
-  if (obj.plugin) {
+  if (obj.plugin && obj.plugin.toLowerCase() !== 'paper') {
     res += tableLine('warning', 'Requires', obj.plugin, true);
   }
   if (obj.deprecated) {
@@ -617,7 +617,10 @@ export async function loadAllMetaDocs(sources: string[] = DEFAULT_SOURCES, force
       group: getFirst('group') || '',
       synonyms: getAll('synonyms').flatMap((s) => s.split(',').map((x) => x.trim().toLowerCase())).filter(Boolean),
       warnings: getAll('warning'),
-      plugin: getFirst('plugin') || undefined,
+      plugin: (() => {
+        const p = getFirst('plugin');
+        return p && p.trim().toLowerCase() !== 'paper' ? p.trim() : undefined;
+      })(),
       deprecated: getFirst('deprecated') || undefined,
       sourceFile: block.url,
       rawValues: Object.fromEntries(map.entries()),
@@ -1042,7 +1045,7 @@ export async function loadAllMetaDocs(sources: string[] = DEFAULT_SOURCES, force
           const example = generateTagExample(tag, objectTypes);
           if (example) {
             const generatedWarning = 'title="This example is generated randomly based on the tag\'s format specification. Specific details such as item/entity type names may not actually be applicable to this tag."';
-            html += tableLine('default text-muted slightly_smaller_text', `<abbr ${generatedWarning}>Generated Example</abbr>`, `<span ${generatedWarning}>${highlight(example)}</span>`, false);
+            html += tableLine('default slightly_smaller_text', `<abbr ${generatedWarning}>Generated Example</abbr>`, `<span ${generatedWarning}>${highlight(example)}</span>`, false);
           }
         }
         break;
@@ -1060,8 +1063,8 @@ export async function loadAllMetaDocs(sources: string[] = DEFAULT_SOURCES, force
           const generatedWarning = 'title="This example is generated randomly based on the event\'s format specification. Specific details such as item/entity type names may not actually be applicable to this event."';
           const sample1 = evt.events.map((e) => generateEventSample(e, extraData));
           const sample2 = evt.events.map((e) => generateEventSample(e, extraData));
-          const uniqueSamples = Array.from(new Set([...sample1, ...sample2])).map(escapeForHTML).join('\n<br>');
-          html += tableLine('default text-muted smaller_text', `<abbr ${generatedWarning}>Generated Examples</abbr>`, `<span ${generatedWarning}>${uniqueSamples}</span>`, false);
+          const uniqueSamples = Array.from(new Set([...sample1, ...sample2])).map(escapeForHTML).join('\n');
+          html += tableLine('default smaller_text', `<abbr ${generatedWarning}>Generated Examples</abbr>`, `<span ${generatedWarning}><pre><code>${uniqueSamples}</code></pre></span>`, false);
         }
         if (evt.player) {
           html += tableLine('default', 'Has Player', evt.player + " - this adds switches 'flagged:<flag name>' + 'permission:<node>', in addition to the '<player>' link.", true);
@@ -1101,7 +1104,7 @@ export async function loadAllMetaDocs(sources: string[] = DEFAULT_SOURCES, force
           const example = generateMechanismExample(mech, objectTypes);
           if (example) {
             const generatedWarning = 'title="This example is generated randomly based on the tag\'s format specification. Specific details such as item/entity type names may not actually be applicable to this tag."';
-            html += tableLine('default text-muted slightly_smaller_text', `<abbr ${generatedWarning}>Generated Example</abbr>`, `<span ${generatedWarning}>${highlight(example)}</span>`, false);
+            html += tableLine('default slightly_smaller_text', `<abbr ${generatedWarning}>Generated Example</abbr>`, `<span ${generatedWarning}>${highlight(example)}</span>`, false);
           }
         }
         break;
