@@ -1,16 +1,15 @@
 'use client';
 
 import React from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function Template({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+
   return (
     <div
+      key={pathname}
       className="w-full flex-1 flex flex-col page-transition"
-      onAnimationEnd={(e) => {
-        if (e.target === e.currentTarget) {
-          e.currentTarget.classList.remove('page-transition');
-        }
-      }}
     >
       {children}
     </div>

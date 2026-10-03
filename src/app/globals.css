@@ -401,12 +401,12 @@ table td:nth-child(2) {
   font-weight: 600;
   vertical-align: top;
   border-right: 1px solid var(--row-border);
-  color: #475569;
+  color: #047857;
   user-select: none;
 }
 
 .dark .td-doc-key {
-  color: #94a3b8 !important;
+  color: #34d399 !important;
 }
 
 tr.table-primary {
@@ -809,7 +809,7 @@ tr {
 
 .theme-black .td-doc-key {
   border-right-color: #1a1a20 !important;
-  color: #a1a1aa !important;
+  color: #34d399 !important;
   font-weight: 600 !important;
 }
 
@@ -1154,5 +1154,38 @@ tr {
   background: #ffffff !important;
   border: 1.5px solid #cbd5e1 !important;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ============================================================
+   Navbar Sliding Active Pill
+   ============================================================ */
+.nav-sliding-pill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto 0;
+  height: 36px;
+  border-radius: 0.5rem;
+  pointer-events: none;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  background-color: rgba(16, 185, 129, 0.12);
+  will-change: transform, width;
+  z-index: 0;
+}
+
+.theme-black .nav-sliding-pill {
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+  background-color: rgba(16, 185, 129, 0.1) !important;
+}
+
+.theme-graphite .nav-sliding-pill {
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  background-color: rgba(56, 189, 248, 0.1) !important;
+}
+
+html:not(.dark):not(.theme-black):not(.theme-graphite) .nav-sliding-pill {
+  border: 1px solid rgba(5, 150, 105, 0.28) !important;
+  background-color: rgba(5, 150, 105, 0.08) !important;
 }
 

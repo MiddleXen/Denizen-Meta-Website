@@ -29,6 +29,47 @@ export function Navbar() {
   const themeMenuRef = useRef<HTMLDivElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
+  // Active sliding indicator
+  const navContainerRef = useRef<HTMLDivElement>(null);
+  const navLinksRef = useRef<(HTMLAnchorElement | null)[]>([]);
+  const [isReady, setIsReady] = useState(false);
+  const [pill, setPill] = useState({ left: 0, width: 0, opacity: 0 });
+
+  const activeIndex = NAV_LINKS.findIndex((link) => pathname.startsWith(link.href));
+
+  const moveTo = (index: number) => {
+    if (index >= 0 && navLinksRef.current[index]) {
+      const el = navLinksRef.current[index]!;
+      if (el.offsetWidth > 0) {
+        setPill({
+          left: el.offsetLeft,
+          width: el.offsetWidth,
+          opacity: 1,
+        });
+      }
+    } else {
+      setPill((prev) => ({ ...prev, opacity: 0 }));
+    }
+  };
+
+  useEffect(() => {
+    // Immediate measurement for the current route
+    moveTo(activeIndex);
+    if (!isReady && activeIndex >= 0) {
+      // Enable CSS transitions after the initial placement is painted
+      const timer = requestAnimationFrame(() => {
+        setIsReady(true);
+      });
+      return () => cancelAnimationFrame(timer);
+    }
+  }, [pathname, activeIndex, isReady]);
+
+  useEffect(() => {
+    const handleResize = () => moveTo(activeIndex);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [activeIndex]);
+
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (themeMenuRef.current && !themeMenuRef.current.contains(e.target as Node)) {
@@ -71,23 +112,43 @@ export function Navbar() {
           </Link>
 
           {/* Desktop Nav Links */}
-          <nav className="hidden xl:flex items-center gap-1">
-            {NAV_LINKS.map((link) => {
-              const isActive = pathname.startsWith(link.href);
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-medium no-underline hover:no-underline transition-all ${
-                    isActive
-                      ? 'bg-emerald-500/10 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-semibold'
-                      : 'text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-100 dark:hover:bg-white/5'
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
+          <nav className="hidden xl:flex items-center gap-1.5">
+            <div ref={navContainerRef} className="relative flex items-center gap-1">
+              {/* Smooth Sliding Active Pill */}
+              <div
+                className="nav-sliding-pill"
+                style={{
+                  transform: `translateX(${pill.left}px)`,
+                  width: `${pill.width}px`,
+                  opacity: pill.opacity,
+                  transition: isReady
+                    ? 'transform 0.24s cubic-bezier(0.2, 0, 0, 1), width 0.24s cubic-bezier(0.2, 0, 0, 1), opacity 0.15s ease'
+                    : 'opacity 0.15s ease',
+                }}
+                aria-hidden="true"
+              />
+
+              {NAV_LINKS.map((link, idx) => {
+                const isActive = activeIndex === idx;
+                return (
+                  <Link
+                    key={link.href}
+                    ref={(el) => {
+                      navLinksRef.current[idx] = el;
+                    }}
+                    href={link.href}
+                    onClick={() => moveTo(idx)}
+                    className={`relative z-10 px-3.5 py-1.5 rounded-lg text-sm font-medium no-underline hover:no-underline transition-colors duration-150 select-none ${
+                      isActive
+                        ? 'text-emerald-600 dark:text-emerald-400'
+                        : 'text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-100/50 dark:hover:bg-white/5'
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+            </div>
 
             {/* Theme Dropdown */}
             <div className="relative" ref={themeMenuRef}>
@@ -251,7 +312,7 @@ export function Navbar() {
                     onClick={() => setMobileMenuOpen(false)}
                     className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
                       isActive
-                        ? 'bg-emerald-500/10 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-semibold'
+                        ? 'bg-emerald-500/10 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400'
                         : 'text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-100 dark:hover:bg-white/5'
                     }`}
                   >
