@@ -141,7 +141,7 @@ export function SearchAutocomplete({
     return (
       <>
         {before}
-        <span className="font-extrabold text-emerald-600 dark:text-[#00efb2] underline decoration-emerald-500/50">
+        <span className="font-bold text-emerald-600 dark:text-emerald-400">
           {matched}
         </span>
         {after}
@@ -157,28 +157,28 @@ export function SearchAutocomplete({
 
   return (
     <div
-      className={`search-autocomplete-panel absolute left-0 right-0 top-full mt-1.5 rounded-xl bg-white/95 dark:bg-[#1f2228]/95 backdrop-blur-xl border border-slate-200 dark:border-white/15 shadow-2xl overflow-hidden z-[100] animate-fade-in text-left ${className}`}
+      className={`search-autocomplete-panel absolute left-0 right-0 top-full mt-1.5 rounded-xl bg-white dark:bg-[#1a1d24] backdrop-blur-xl border border-slate-200 dark:border-white/15 shadow-2xl overflow-hidden z-[100] text-left ${className}`}
     >
-      <div className="px-3.5 py-2 text-[11px] font-semibold text-slate-400 dark:text-zinc-400 uppercase tracking-wider flex items-center justify-between border-b border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-white/[0.02]">
+      <div className="px-3.5 py-2 text-[11px] font-semibold text-slate-400 dark:text-zinc-400 uppercase tracking-wider flex items-center justify-between border-b border-slate-200/60 dark:border-white/[0.08] bg-slate-50/80 dark:bg-black/25">
         <span>Quick Suggestions</span>
         <span className="hidden sm:inline-block text-[10px] text-slate-400 dark:text-zinc-500 font-mono">
           ↑↓ navigate &bull; ↵ select
         </span>
       </div>
 
-      <div className="max-h-[360px] overflow-y-auto divide-y divide-slate-100 dark:divide-white/5 py-1">
+      <div className="max-h-[460px] overflow-y-auto divide-y divide-slate-100 dark:divide-white/[0.06] py-1">
         {matches.length > 0 ? (
           matches.map((item, idx) => {
             const isSelected = activeIndex === idx;
             return (
               <div
                 key={item.href}
-                onMouseEnter={() => setActiveIndex(idx)}
+                onMouseMove={() => setActiveIndex(idx)}
                 onClick={() => handleItemClick(item.href)}
-                className={`px-3.5 py-2.5 flex items-center justify-between gap-3 cursor-pointer transition-colors ${
+                className={`px-3.5 py-2.5 flex items-center justify-between gap-3 cursor-pointer transition-colors duration-100 ${
                   isSelected
-                    ? 'bg-emerald-500/10 dark:bg-white/10 text-slate-900 dark:text-white'
-                    : 'text-slate-800 dark:text-zinc-200 hover:bg-slate-50 dark:hover:bg-white/5'
+                    ? 'bg-emerald-500/15 dark:bg-emerald-500/20 text-emerald-950 dark:text-emerald-300'
+                    : 'text-slate-800 dark:text-zinc-200 hover:bg-emerald-500/10 dark:hover:bg-emerald-500/10 hover:text-emerald-900 dark:hover:text-emerald-300'
                 }`}
               >
                 <div className="flex items-center gap-2.5 min-w-0 flex-1">
@@ -197,7 +197,7 @@ export function SearchAutocomplete({
 
                 <ArrowRight
                   className={`w-3.5 h-3.5 flex-shrink-0 text-slate-400 transition-transform ${
-                    isSelected ? 'translate-x-1 text-emerald-500 dark:text-[#00bc8c]' : 'opacity-40'
+                    isSelected ? 'translate-x-1 text-emerald-500 dark:text-emerald-400' : 'opacity-40'
                   }`}
                 />
               </div>
@@ -215,14 +215,14 @@ export function SearchAutocomplete({
       </div>
 
       {/* Footer link to full search */}
-      <div className="p-2 border-t border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-[#17191d]/80">
+      <div className="p-2 border-t border-slate-200/60 dark:border-white/[0.08] bg-slate-50/80 dark:bg-black/35">
         <Link
           href={`/Docs/Search/${encodeURIComponent(query.trim())}`}
           onClick={() => {
             onClose();
             if (onSelect) onSelect();
           }}
-          className="w-full px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-zinc-300 hover:text-emerald-600 dark:hover:text-[#00bc8c] hover:bg-slate-200/50 dark:hover:bg-white/5 flex items-center justify-between transition-colors no-underline hover:no-underline"
+          className="w-full px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-zinc-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-200/50 dark:hover:bg-white/5 flex items-center justify-between transition-colors no-underline hover:no-underline"
         >
           <span className="flex items-center gap-1.5 truncate">
             <span>Search all results for</span>

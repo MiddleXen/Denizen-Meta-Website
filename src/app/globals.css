@@ -685,7 +685,21 @@ a.group, a.group *, a.group:hover, a.group:hover * {
   100% { background-color: transparent; }
 }
 
-/* Scrollbars */
+/* Scrollbars (Cross-browser, WebKit & Firefox) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #475569 transparent;
+}
+:root:not(.dark) {
+  scrollbar-color: #cbd5e1 transparent;
+}
+.theme-black {
+  scrollbar-color: #27272a transparent;
+}
+.theme-graphite {
+  scrollbar-color: #334155 transparent;
+}
+
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -1064,16 +1078,42 @@ tr {
 }
 
 /* Search Autocomplete Panel Theme Adaptations */
+.search-autocomplete-panel {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+
+.search-autocomplete-panel *::-webkit-scrollbar {
+  width: 5px;
+}
+
+.search-autocomplete-panel *::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.search-autocomplete-panel *::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 9999px;
+}
+
+:root:not(.dark) .search-autocomplete-panel {
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+:root:not(.dark) .search-autocomplete-panel *::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+}
+
 .theme-black .search-autocomplete-panel {
-  background-color: rgba(9, 9, 11, 0.98) !important;
-  border-color: rgba(255, 255, 255, 0.18) !important;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+  background-color: #0b0c0f !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
 }
 
 .theme-graphite .search-autocomplete-panel {
-  background-color: rgba(30, 30, 33, 0.98) !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7) !important;
+  background-color: #191a1e !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8) !important;
 }
 
 /* ============================================================

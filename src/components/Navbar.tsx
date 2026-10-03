@@ -276,6 +276,10 @@ export function Navbar() {
                 type="text"
                 placeholder="Search meta..."
                 value={searchValue}
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck={false}
                 onChange={(e) => {
                   setSearchValue(e.target.value);
                   setIsSearchOpen(true);

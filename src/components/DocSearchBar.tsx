@@ -64,6 +64,10 @@ export function DocSearchBar({ basePath, placeholder, initialValue }: DocSearchB
         id="search_bar"
         placeholder={placeholder}
         value={searchValue}
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck={false}
         onChange={(e) => {
           setSearchValue(e.target.value);
           setIsOpen(true);

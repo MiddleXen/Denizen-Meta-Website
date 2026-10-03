@@ -51,6 +51,10 @@ export function HomeSearch() {
           <input
             type="text"
             value={searchValue}
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck={false}
             onChange={(e) => {
               setSearchValue(e.target.value);
               setIsOpen(true);
