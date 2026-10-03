@@ -29,51 +29,6 @@ export function Navbar() {
   const themeMenuRef = useRef<HTMLDivElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
-  // Sliding active indicator state & refs
-  const [clickedIndex, setClickedIndex] = useState<number | null>(null);
-  const [isReady, setIsReady] = useState(false);
-  const [indicatorStyle, setIndicatorStyle] = useState<{
-    left: number;
-    width: number;
-    opacity: number;
-  }>({ left: 0, width: 0, opacity: 0 });
-
-  const navLinksRef = useRef<(HTMLAnchorElement | null)[]>([]);
-  const navContainerRef = useRef<HTMLDivElement>(null);
-
-  const activeIndex = NAV_LINKS.findIndex((link) => pathname.startsWith(link.href));
-  const targetIndex = clickedIndex !== null ? clickedIndex : activeIndex;
-
-  const updateIndicator = (index: number) => {
-    if (index >= 0 && navLinksRef.current[index]) {
-      const el = navLinksRef.current[index]!;
-      setIndicatorStyle({
-        left: el.offsetLeft,
-        width: el.offsetWidth,
-        opacity: 1,
-      });
-      setIsReady(true);
-    } else {
-      setIndicatorStyle((prev) => ({ ...prev, opacity: 0 }));
-    }
-  };
-
-  useEffect(() => {
-    if (clickedIndex === null || clickedIndex !== activeIndex) {
-      updateIndicator(activeIndex);
-    }
-    setClickedIndex(null);
-  }, [pathname, activeIndex]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const current = clickedIndex !== null ? clickedIndex : activeIndex;
-      updateIndicator(current);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [clickedIndex, activeIndex]);
-
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (themeMenuRef.current && !themeMenuRef.current.contains(e.target as Node)) {
@@ -117,51 +72,20 @@ export function Navbar() {
 
           {/* Desktop Nav Links */}
           <nav className="hidden xl:flex items-center gap-1">
-            <div
-              ref={navContainerRef}
-              className="relative flex items-center gap-1"
-            >
-              {/* Sliding Active Pill / Selection Outline */}
-              <div
-                className="nav-sliding-pill absolute top-1/2 rounded-lg pointer-events-none"
-                style={{
-                  transform: `translate3d(${indicatorStyle.left}px, -50%, 0)`,
-                  width: `${indicatorStyle.width}px`,
-                  height: '32px',
-                  left: 0,
-                  opacity: indicatorStyle.opacity,
-                  transition: isReady
-                    ? 'transform 0.13s cubic-bezier(0.2, 0, 0, 1), width 0.13s cubic-bezier(0.2, 0, 0, 1), opacity 0.1s ease'
-                    : 'opacity 0.1s ease',
-                }}
-                aria-hidden="true"
-              />
-
-              {NAV_LINKS.map((link, idx) => {
-                const isActive = activeIndex === idx;
-                const isSelected = targetIndex === idx;
-                return (
-                  <Link
-                    key={link.href}
-                    ref={(el) => {
-                      navLinksRef.current[idx] = el;
-                    }}
-                    href={link.href}
-                    onClick={() => {
-                      setClickedIndex(idx);
-                      updateIndicator(idx);
-                    }}
-                    className={`relative z-10 px-3 py-1.5 rounded-lg text-sm font-medium no-underline hover:no-underline transition-colors duration-100 select-none ${
-                      isActive || isSelected
-                        ? 'text-emerald-600 dark:text-[#00bc8c]'
-                        : 'text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-[#00bc8c] hover:bg-slate-100/60 dark:hover:bg-white/5'
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
-            </div>
+            {NAV_LINKS.map((link) => {
+              const isActive = pathname.startsWith(link.href);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`nav-tab-link px-3 py-1.5 rounded-lg text-sm font-medium no-underline hover:no-underline transition-colors duration-150 select-none ${
+                    isActive ? 'nav-tab-active' : 'nav-tab-idle'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
 
             {/* Theme Dropdown (Like official Denizen Meta) */}
             <div className="relative" ref={themeMenuRef}>
@@ -327,10 +251,8 @@ export function Navbar() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
-                      isActive
-                        ? 'bg-emerald-500/10 dark:bg-[#00bc8c]/15 text-emerald-600 dark:text-[#00bc8c] font-semibold border border-emerald-500/35 dark:border-[#00bc8c]/40'
-                        : 'text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-[#00bc8c] hover:bg-slate-100 dark:hover:bg-white/5 border border-transparent'
+                    className={`nav-tab-link px-2.5 py-1 rounded-lg text-xs font-medium no-underline hover:no-underline transition-colors duration-150 select-none ${
+                      isActive ? 'nav-tab-active' : 'nav-tab-idle'
                     }`}
                   >
                     {link.label}
