@@ -742,31 +742,6 @@ a.group, a.group *, a.group:hover, a.group:hover * {
   animation: fadeIn 0.3s ease-out both;
 }
 
-/* Fast, GPU-accelerated page entry with subtle book-turn perspective */
-@keyframes bookPageTurn {
-  0% {
-    opacity: 0;
-    transform: perspective(1400px) rotateY(-2.2deg) translateX(10px) scale(0.996);
-  }
-  100% {
-    opacity: 1;
-    transform: perspective(1400px) rotateY(0deg) translateX(0) scale(1);
-  }
-}
-
-.page-transition {
-  transform-origin: 0% 25%;
-  animation: bookPageTurn 0.24s cubic-bezier(0.16, 1, 0.3, 1) both;
-  will-change: transform, opacity;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .page-transition {
-    animation: none !important;
-    transform: none !important;
-    opacity: 1 !important;
-  }
-}
 
 /* Stagger utilities for cards on homepage */
 .stagger-1 { animation-delay: 0.03s; }
@@ -1157,35 +1132,34 @@ tr {
 }
 
 /* ============================================================
-   Navbar Sliding Active Pill
+   Navbar Sliding Selection Outline / Active Indicator
    ============================================================ */
 .nav-sliding-pill {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  margin: auto 0;
-  height: 36px;
   border-radius: 0.5rem;
   pointer-events: none;
-  border: 1px solid rgba(16, 185, 129, 0.35);
-  background-color: rgba(16, 185, 129, 0.12);
+  border: 1.5px solid rgba(0, 188, 140, 0.45);
+  background-color: rgba(0, 188, 140, 0.12);
+  box-shadow: 0 0 10px rgba(0, 188, 140, 0.15);
   will-change: transform, width;
-  z-index: 0;
+  z-index: 1;
 }
 
 .theme-black .nav-sliding-pill {
-  border: 1px solid rgba(16, 185, 129, 0.3) !important;
-  background-color: rgba(16, 185, 129, 0.1) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.38) !important;
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.12) !important;
 }
 
 .theme-graphite .nav-sliding-pill {
-  border: 1px solid rgba(56, 189, 248, 0.3) !important;
-  background-color: rgba(56, 189, 248, 0.1) !important;
+  border: 1.5px solid rgba(203, 213, 225, 0.38) !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 0 10px rgba(203, 213, 225, 0.12) !important;
 }
 
 html:not(.dark):not(.theme-black):not(.theme-graphite) .nav-sliding-pill {
-  border: 1px solid rgba(5, 150, 105, 0.28) !important;
-  background-color: rgba(5, 150, 105, 0.08) !important;
+  border: 1.5px solid rgba(5, 150, 105, 0.38) !important;
+  background-color: rgba(5, 150, 105, 0.1) !important;
+  box-shadow: 0 0 8px rgba(5, 150, 105, 0.1) !important;
 }
 
