@@ -6,6 +6,7 @@ import { Footer } from '@/components/Footer';
 import { SearchProvider } from '@/components/SearchContext';
 import { BackToTop } from '@/components/BackToTop';
 import { NavigationProgressBar } from '@/components/NavigationProgressBar';
+import { InteractiveBackground } from '@/components/InteractiveBackground';
 import { Suspense } from 'react';
 import Script from 'next/script';
 import './globals.css';
@@ -39,9 +40,7 @@ export default async function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body className="min-h-screen flex flex-col antialiased selection:bg-emerald-500/20 selection:text-emerald-400 relative">
-        {/* Atmospheric Ambient Background (Soft multi-layered depth, no AI square grids) */}
-        <div className="ambient-glow-top fixed inset-0 pointer-events-none -z-10" />
-        <div className="ambient-glow-accents fixed inset-0 pointer-events-none -z-10" />
+        <InteractiveBackground />
 
         <ThemeProvider initialTheme={initialTheme}>
           <Suspense fallback={null}>

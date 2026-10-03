@@ -867,45 +867,84 @@ tr {
   color: #ffffff !important;
 }
 
-/* Atmospheric Background (Smooth organic glows, no AI square grids) */
-.ambient-glow-top {
+/* ============================================================
+   Interactive Grid Background (Vignette-masked grid with mouse outline glow)
+   ============================================================ */
+
+.interactive-grid-container {
+  --mouse-x: -999px;
+  --mouse-y: -999px;
+}
+
+/* 1. Atmospheric soft radial glow */
+.grid-ambient-glow {
   background: radial-gradient(ellipse 75% 45% at 50% -5%, rgba(0, 188, 140, 0.08), transparent 70%);
 }
 
-.ambient-glow-accents {
-  background: 
-    radial-gradient(circle 500px at 10% 35%, rgba(16, 185, 129, 0.035), transparent 60%),
-    radial-gradient(circle 600px at 90% 65%, rgba(20, 184, 166, 0.03), transparent 65%);
-}
-
-.theme-black .ambient-glow-top {
+.theme-black .grid-ambient-glow {
   background: radial-gradient(ellipse 75% 45% at 50% -5%, rgba(0, 239, 178, 0.06), transparent 72%) !important;
 }
 
-.theme-black .ambient-glow-accents {
-  background: 
-    radial-gradient(circle 500px at 12% 35%, rgba(0, 239, 178, 0.025), transparent 60%),
-    radial-gradient(circle 600px at 88% 65%, rgba(52, 211, 153, 0.02), transparent 65%) !important;
-}
-
-.theme-graphite .ambient-glow-top {
+.theme-graphite .grid-ambient-glow {
   background: radial-gradient(ellipse 75% 45% at 50% -5%, rgba(56, 189, 248, 0.07), transparent 70%) !important;
 }
 
-.theme-graphite .ambient-glow-accents {
-  background: 
-    radial-gradient(circle 500px at 12% 35%, rgba(56, 189, 248, 0.025), transparent 60%),
-    radial-gradient(circle 600px at 88% 65%, rgba(148, 163, 184, 0.02), transparent 65%) !important;
-}
-
-:root:not(.dark) .ambient-glow-top {
+:root:not(.dark) .grid-ambient-glow {
   background: radial-gradient(ellipse 75% 45% at 50% -5%, rgba(5, 150, 105, 0.05), transparent 70%);
 }
 
-:root:not(.dark) .ambient-glow-accents {
+/* 2. Base Grid Pattern with Radial Vignette Mask (No harsh edges) */
+.grid-base-pattern {
   background: 
-    radial-gradient(circle 500px at 12% 35%, rgba(5, 150, 105, 0.02), transparent 60%),
-    radial-gradient(circle 600px at 88% 65%, rgba(13, 148, 136, 0.015), transparent 65%);
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 70% 55% at 50% 18%, black 15%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 18%, black 15%, transparent 75%);
+}
+
+.theme-black .grid-base-pattern {
+  background: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 70% 55% at 50% 18%, black 10%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 18%, black 10%, transparent 75%);
+}
+
+:root:not(.dark) .grid-base-pattern {
+  background: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 70% 55% at 50% 18%, black 15%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 18%, black 15%, transparent 75%);
+}
+
+/* 3. Interactive Cursor Spotlight on Grid Outlines */
+.grid-cursor-lighting {
+  background: radial-gradient(circle 180px at var(--mouse-x, -999px) var(--mouse-y, -999px), rgba(0, 239, 178, 0.35) 0%, transparent 100%);
+  mask-image: 
+    linear-gradient(to right, black 1px, transparent 1px),
+    linear-gradient(to bottom, black 1px, transparent 1px);
+  mask-size: 48px 48px;
+  -webkit-mask-image: 
+    linear-gradient(to right, black 1px, transparent 1px),
+    linear-gradient(to bottom, black 1px, transparent 1px);
+  -webkit-mask-size: 48px 48px;
+}
+
+.theme-graphite .grid-cursor-lighting {
+  background: radial-gradient(circle 180px at var(--mouse-x, -999px) var(--mouse-y, -999px), rgba(56, 189, 248, 0.35) 0%, transparent 100%);
+}
+
+:root:not(.dark) .grid-cursor-lighting {
+  background: radial-gradient(circle 180px at var(--mouse-x, -999px) var(--mouse-y, -999px), rgba(5, 150, 105, 0.22) 0%, transparent 100%);
+}
+
+/* 4. Bottom fade */
+.grid-bottom-fade {
+  background: linear-gradient(to bottom, transparent, var(--bg-page));
 }
 
 .theme-black .hover\:bg-emerald-500:hover,
