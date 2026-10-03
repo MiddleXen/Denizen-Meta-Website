@@ -400,8 +400,9 @@ a.group, a.group *, a.group:hover, a.group:hover * {
 .categories_wrapper {
   margin: 1rem auto 1.75rem auto;
   max-width: 1200px;
-  width: 95%;
-  padding: 1rem 1.25rem;
+  width: fit-content;
+  min-width: min(300px, 92%);
+  padding: 0.85rem 1.25rem;
   background-color: rgba(0, 0, 0, 0.02);
   border: 1px solid var(--row-border);
   border-radius: 16px;
