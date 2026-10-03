@@ -5,6 +5,8 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { SearchProvider } from '@/components/SearchContext';
 import { BackToTop } from '@/components/BackToTop';
+import { NavigationProgressBar } from '@/components/NavigationProgressBar';
+import { Suspense } from 'react';
 import Script from 'next/script';
 import './globals.css';
 
@@ -42,6 +44,9 @@ export default async function RootLayout({
         <div className="fixed inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.025)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.025)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none -z-10" />
 
         <ThemeProvider initialTheme={initialTheme}>
+          <Suspense fallback={null}>
+            <NavigationProgressBar />
+          </Suspense>
           <SearchProvider>
             <Navbar />
             <main className="flex-1 w-full relative z-0">
