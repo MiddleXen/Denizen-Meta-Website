@@ -35,9 +35,8 @@ export function Navbar() {
   const [indicatorStyle, setIndicatorStyle] = useState<{
     left: number;
     width: number;
-    height: number;
     opacity: number;
-  }>({ left: 0, width: 0, height: 32, opacity: 0 });
+  }>({ left: 0, width: 0, opacity: 0 });
 
   const navLinksRef = useRef<(HTMLAnchorElement | null)[]>([]);
   const navContainerRef = useRef<HTMLDivElement>(null);
@@ -45,36 +44,33 @@ export function Navbar() {
   const activeIndex = NAV_LINKS.findIndex((link) => pathname.startsWith(link.href));
   const targetIndex = clickedIndex !== null ? clickedIndex : activeIndex;
 
+  const updateIndicator = (index: number) => {
+    if (index >= 0 && navLinksRef.current[index]) {
+      const el = navLinksRef.current[index]!;
+      setIndicatorStyle({
+        left: el.offsetLeft,
+        width: el.offsetWidth,
+        opacity: 1,
+      });
+      setIsReady(true);
+    } else {
+      setIndicatorStyle((prev) => ({ ...prev, opacity: 0 }));
+    }
+  };
+
   useEffect(() => {
     setClickedIndex(null);
-  }, [pathname]);
+    updateIndicator(activeIndex);
+  }, [pathname, activeIndex]);
 
   useEffect(() => {
-    const updateIndicator = () => {
-      if (targetIndex >= 0 && navLinksRef.current[targetIndex] && navContainerRef.current) {
-        const containerRect = navContainerRef.current.getBoundingClientRect();
-        const elRect = navLinksRef.current[targetIndex]!.getBoundingClientRect();
-        setIndicatorStyle({
-          left: elRect.left - containerRect.left,
-          width: elRect.width,
-          height: elRect.height,
-          opacity: 1,
-        });
-        setIsReady(true);
-      } else {
-        setIndicatorStyle((prev) => ({ ...prev, opacity: 0 }));
-      }
+    const handleResize = () => {
+      const current = clickedIndex !== null ? clickedIndex : activeIndex;
+      updateIndicator(current);
     };
-
-    updateIndicator();
-    const rafId = requestAnimationFrame(updateIndicator);
-
-    window.addEventListener('resize', updateIndicator);
-    return () => {
-      window.removeEventListener('resize', updateIndicator);
-      cancelAnimationFrame(rafId);
-    };
-  }, [targetIndex, pathname, theme]);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [clickedIndex, activeIndex]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -125,14 +121,16 @@ export function Navbar() {
             >
               {/* Sliding Active Pill / Selection Outline */}
               <div
-                className={`nav-sliding-pill absolute top-1/2 -translate-y-1/2 rounded-lg pointer-events-none ${
-                  isReady ? 'transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]' : ''
-                }`}
+                className="nav-sliding-pill absolute top-1/2 rounded-lg pointer-events-none"
                 style={{
-                  left: `${indicatorStyle.left}px`,
+                  transform: `translate3d(${indicatorStyle.left}px, -50%, 0)`,
                   width: `${indicatorStyle.width}px`,
-                  height: `${indicatorStyle.height || 32}px`,
+                  height: '32px',
+                  left: 0,
                   opacity: indicatorStyle.opacity,
+                  transition: isReady
+                    ? 'transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), width 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.15s ease'
+                    : 'opacity 0.15s ease',
                 }}
                 aria-hidden="true"
               />
@@ -147,11 +145,14 @@ export function Navbar() {
                       navLinksRef.current[idx] = el;
                     }}
                     href={link.href}
-                    onClick={() => setClickedIndex(idx)}
+                    onClick={() => {
+                      setClickedIndex(idx);
+                      updateIndicator(idx);
+                    }}
                     className={`relative z-10 px-3 py-1.5 rounded-lg text-sm font-medium no-underline hover:no-underline transition-colors duration-150 select-none ${
                       isActive || isSelected
-                        ? 'text-emerald-600 dark:text-[#00bc8c] font-semibold'
-                        : 'text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-[#00bc8c] hover:bg-slate-100 dark:hover:bg-white/5'
+                        ? 'text-emerald-600 dark:text-[#00bc8c]'
+                        : 'text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-[#00bc8c] hover:bg-slate-100/60 dark:hover:bg-white/5'
                     }`}
                   >
                     {link.label}

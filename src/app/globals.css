@@ -1035,32 +1035,6 @@ tr {
 }
 
 /* ============================================================
-   Fast & Smooth Page Transition (Hardware-accelerated, zero lag)
-   ============================================================ */
-.page-transition-wrapper {
-  position: relative;
-  animation: pageSmoothFade 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
-  will-change: opacity, transform;
-}
-
-@keyframes pageSmoothFade {
-  0% {
-    opacity: 0.2;
-    transform: translateY(4px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .page-transition-wrapper {
-    animation: none !important;
-  }
-}
-
-/* ============================================================
    Navbar Sliding Selection Outline / Active Indicator
    ============================================================ */
 .nav-sliding-pill {
@@ -1069,26 +1043,27 @@ tr {
   pointer-events: none;
   border: 1.5px solid rgba(0, 188, 140, 0.45);
   background-color: rgba(0, 188, 140, 0.12);
-  box-shadow: 0 0 12px rgba(0, 188, 140, 0.15);
+  box-shadow: 0 0 10px rgba(0, 188, 140, 0.15);
+  will-change: transform, width;
   z-index: 1;
 }
 
 .theme-black .nav-sliding-pill {
   border: 1.5px solid rgba(255, 255, 255, 0.38) !important;
   background-color: rgba(255, 255, 255, 0.12) !important;
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.12) !important;
 }
 
 .theme-graphite .nav-sliding-pill {
   border: 1.5px solid rgba(203, 213, 225, 0.38) !important;
   background-color: rgba(255, 255, 255, 0.08) !important;
-  box-shadow: 0 0 12px rgba(203, 213, 225, 0.12) !important;
+  box-shadow: 0 0 10px rgba(203, 213, 225, 0.12) !important;
 }
 
 html:not(.dark):not(.theme-black):not(.theme-graphite) .nav-sliding-pill {
   border: 1.5px solid rgba(5, 150, 105, 0.38) !important;
   background-color: rgba(5, 150, 105, 0.1) !important;
-  box-shadow: 0 0 10px rgba(5, 150, 105, 0.1) !important;
+  box-shadow: 0 0 8px rgba(5, 150, 105, 0.1) !important;
 }
 
 
