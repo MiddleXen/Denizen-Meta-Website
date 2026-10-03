@@ -38,9 +38,9 @@ export default async function RootLayout({
         <meta name="color-scheme" content="dark light" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
-      <body className="min-h-screen flex flex-col antialiased selection:bg-[#00bc8c]/25 selection:text-[#00bc8c] relative">
+      <body className="min-h-screen flex flex-col antialiased selection:bg-emerald-500/20 selection:text-emerald-400 relative">
         {/* Ambient Gradient & Mesh Background (Fast static, 0% GPU overhead) */}
-        <div className="ambient-mesh fixed inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(0,188,140,0.14),transparent_70%)] pointer-events-none -z-10" />
+        <div className="ambient-mesh fixed inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(16,185,129,0.06),transparent_70%)] pointer-events-none -z-10" />
         <div className="fixed inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.025)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.025)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none -z-10" />
 
         <ThemeProvider initialTheme={initialTheme}>

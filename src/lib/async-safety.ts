@@ -237,7 +237,7 @@ export function getCommandAsyncStatus(commandName: string): CommandAsyncInfo {
       runsAsync: true,
       deferrable: true,
       deferrableDetails,
-      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-[#00efb2] border border-emerald-500/30">⚡ Runs Off-Thread</span> <span class="badge-async-defer inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-sky-500/15 text-sky-600 dark:text-sky-400 border border-sky-500/30">⚡ Deferrable</span>`,
+      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">⚡ Runs Off-Thread</span> <span class="badge-async-defer inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-sky-500/15 text-sky-600 dark:text-sky-400 border border-sky-500/30">⚡ Deferrable</span>`,
       descriptionText: `Runs on the async queue's worker thread without main-thread hand-off. Also deferrable (${deferrableDetails.toLowerCase()}).`,
     };
   }
@@ -246,7 +246,7 @@ export function getCommandAsyncStatus(commandName: string): CommandAsyncInfo {
     return {
       runsAsync: true,
       deferrable: false,
-      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-[#00efb2] border border-emerald-500/30">⚡ Runs Off-Thread</span>`,
+      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">⚡ Runs Off-Thread</span>`,
       descriptionText: `Runs directly on the async queue's worker thread without main-thread hand-off.`,
     };
   }
@@ -317,7 +317,7 @@ export function getTagAsyncStatus(cleanTagName: string, beforeDotRaw = '', after
 
     return {
       isSafe: true,
-      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-[#00efb2] border border-emerald-500/30">⚡ Async-Safe</span>`,
+      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">⚡ Async-Safe</span>`,
       descriptionText: `Pure data constructor / static format: evaluates directly on the async worker thread (0ms latency, no main-thread hand-off).`,
     };
   }
@@ -326,7 +326,7 @@ export function getTagAsyncStatus(cleanTagName: string, beforeDotRaw = '', after
   if (COLOR_FORMATTING_TAGS.has(cleanTag) || cleanTag.startsWith('&')) {
     return {
       isSafe: true,
-      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-[#00efb2] border border-emerald-500/30">⚡ Async-Safe</span>`,
+      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">⚡ Async-Safe</span>`,
       descriptionText: `Pure static formatting code: evaluates directly on the async worker thread with 0ms latency.`,
     };
   }
@@ -339,7 +339,7 @@ export function getTagAsyncStatus(cleanTagName: string, beforeDotRaw = '', after
   ) {
     return {
       isSafe: true,
-      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-[#00efb2] border border-emerald-500/30">⚡ Async-Safe</span>`,
+      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">⚡ Async-Safe</span>`,
       descriptionText: `Pure data processing: evaluates directly on the async script's worker thread (0ms latency, no main-thread hand-off).`,
     };
   }
@@ -356,7 +356,7 @@ export function getTagAsyncStatus(cleanTagName: string, beforeDotRaw = '', after
     }
     return {
       isSafe: true,
-      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-[#00efb2] border border-emerald-500/30">⚡ Async-Safe</span>`,
+      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">⚡ Async-Safe</span>`,
       descriptionText: `Registry / constant data: evaluates directly on the async worker thread without hand-off.`,
     };
   }
@@ -366,7 +366,7 @@ export function getTagAsyncStatus(cleanTagName: string, beforeDotRaw = '', after
   if (subtagSet && subtagSet.has(firstAttr)) {
     return {
       isSafe: true,
-      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-[#00efb2] border border-emerald-500/30">⚡ Async-Safe</span>`,
+      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">⚡ Async-Safe</span>`,
       descriptionText: `Memory / cached field: safe off the main thread (0ms latency, thread-safe access).`,
     };
   }
@@ -376,7 +376,7 @@ export function getTagAsyncStatus(cleanTagName: string, beforeDotRaw = '', after
     if (ASYNC_SAFE_SUBTAGS.servertag.has(firstAttr)) {
       return {
         isSafe: true,
-        badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-[#00efb2] border border-emerald-500/30">⚡ Async-Safe</span>`,
+        badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">⚡ Async-Safe</span>`,
         descriptionText: `Static server registry / cached value: safe off the main thread.`,
       };
     }
@@ -397,7 +397,7 @@ export function getTagAsyncStatus(cleanTagName: string, beforeDotRaw = '', after
     ) {
       return {
         isSafe: true,
-        badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-[#00efb2] border border-emerald-500/30">⚡ Async-Safe</span>`,
+        badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">⚡ Async-Safe</span>`,
         descriptionText: `Utility computation: runs directly on the async script's thread.`,
       };
     }
@@ -407,7 +407,7 @@ export function getTagAsyncStatus(cleanTagName: string, beforeDotRaw = '', after
   if (!afterDot && (baseKey === 'location' || baseKey === 'material' || BARE_SAFE_BASES.has(baseKey) || BARE_SAFE_BASES.has(typeKey))) {
     return {
       isSafe: true,
-      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-[#00efb2] border border-emerald-500/30">⚡ Async-Safe</span>`,
+      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">⚡ Async-Safe</span>`,
       descriptionText: `Evaluates directly on the async worker thread without main-thread hand-off.`,
     };
   }
@@ -420,7 +420,7 @@ export function getTagAsyncStatus(cleanTagName: string, beforeDotRaw = '', after
   ) {
     return {
       isSafe: true,
-      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-[#00efb2] border border-emerald-500/30">⚡ Async-Safe</span>`,
+      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">⚡ Async-Safe</span>`,
       descriptionText: `Async queue introspection: evaluates on the queue's worker thread.`,
     };
   }
@@ -446,7 +446,7 @@ export function getObjectTypeAsyncStatus(cleanTypeName: string): {
       isFullSafe: true,
       isPartial: false,
       safeCount: 999,
-      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-[#00efb2] border border-emerald-500/30">⚡ 100% Async-Safe</span>`,
+      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">⚡ 100% Async-Safe</span>`,
       descriptionText: `Every tag on this object type is completely safe off the main thread. Pure data processing.`,
     };
   }
@@ -457,7 +457,7 @@ export function getObjectTypeAsyncStatus(cleanTypeName: string): {
       isFullSafe: true,
       isPartial: false,
       safeCount: 999,
-      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-[#00efb2] border border-emerald-500/30">⚡ Async-Safe (${count} exceptions)</span>`,
+      badgeHtml: `<span class="badge-async-safe inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">⚡ Async-Safe (${count} exceptions)</span>`,
       descriptionText: `Safe off the main thread except for ${Array.from(ASYNC_UNSAFE_EXCEPTIONS[clean]).join(', ')}.`,
     };
   }

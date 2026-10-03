@@ -29,68 +29,6 @@ export function Navbar() {
   const themeMenuRef = useRef<HTMLDivElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
-  // Sliding active indicator state & refs
-  const [clickedIndex, setClickedIndex] = useState<number | null>(null);
-  const [isReady, setIsReady] = useState(false);
-  const [indicatorStyle, setIndicatorStyle] = useState<{
-    left: number;
-    width: number;
-    opacity: number;
-  }>({ left: 0, width: 0, opacity: 0 });
-
-  const navLinksRef = useRef<(HTMLAnchorElement | null)[]>([]);
-  const navContainerRef = useRef<HTMLDivElement>(null);
-  const hasMountedRef = useRef(false);
-
-  const activeIndex = NAV_LINKS.findIndex((link) => pathname.startsWith(link.href));
-  const targetIndex = clickedIndex !== null ? clickedIndex : activeIndex;
-
-  const updateIndicator = (index: number, animate = true) => {
-    if (index >= 0 && navLinksRef.current[index]) {
-      const el = navLinksRef.current[index]!;
-      const left = el.offsetLeft;
-      const width = el.offsetWidth;
-      if (width > 0) {
-        setIndicatorStyle({
-          left,
-          width,
-          opacity: 1,
-        });
-        if (animate && hasMountedRef.current) {
-          setIsReady(true);
-        }
-      }
-    } else {
-      setIndicatorStyle((prev) => ({ ...prev, opacity: 0 }));
-    }
-  };
-
-  useEffect(() => {
-    setClickedIndex(null);
-    if (!hasMountedRef.current) {
-      updateIndicator(activeIndex, false);
-      const id1 = requestAnimationFrame(() => {
-        const id2 = requestAnimationFrame(() => {
-          hasMountedRef.current = true;
-          setIsReady(true);
-        });
-        return () => cancelAnimationFrame(id2);
-      });
-      return () => cancelAnimationFrame(id1);
-    } else {
-      updateIndicator(activeIndex, true);
-    }
-  }, [pathname, activeIndex]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const current = clickedIndex !== null ? clickedIndex : activeIndex;
-      updateIndicator(current, false);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [clickedIndex, activeIndex]);
-
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (themeMenuRef.current && !themeMenuRef.current.contains(e.target as Node)) {
@@ -124,71 +62,42 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full bg-white/90 dark:bg-[#222222]/90 backdrop-blur-md border-b border-slate-200 dark:border-white/10 shadow-xs">
       <div className="max-w-[1550px] mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between h-[4.25rem] sm:h-[4.5rem] gap-3">
+        <div className="flex items-center justify-between h-16 gap-3">
           {/* Logo / Brand */}
           <Link href="/" className="flex items-center flex-shrink-0 no-underline hover:no-underline">
-            <span className="font-bold text-base sm:text-lg tracking-tight text-slate-900 dark:text-white hover:text-emerald-500 dark:hover:text-[#00bc8c] transition-colors no-underline">
+            <span className="font-bold text-base sm:text-lg tracking-tight text-slate-900 dark:text-white hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors no-underline">
               DenizenM Meta Documentation
             </span>
           </Link>
 
           {/* Desktop Nav Links */}
-          <nav className="hidden xl:flex items-center gap-1.5">
-            <div
-              ref={navContainerRef}
-              className="relative flex items-center gap-1"
-            >
-              {/* Sliding Active Pill / Selection Outline */}
-              <div
-                className="nav-sliding-pill absolute top-1/2 rounded-lg pointer-events-none"
-                style={{
-                  transform: `translate3d(${indicatorStyle.left}px, -50%, 0)`,
-                  width: `${indicatorStyle.width}px`,
-                  height: '40px',
-                  left: 0,
-                  opacity: indicatorStyle.opacity,
-                  transition: isReady
-                    ? 'transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), width 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.15s ease'
-                    : 'opacity 0.15s ease',
-                }}
-                aria-hidden="true"
-              />
+          <nav className="hidden xl:flex items-center gap-1">
+            {NAV_LINKS.map((link) => {
+              const isActive = pathname.startsWith(link.href);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium no-underline hover:no-underline transition-all ${
+                    isActive
+                      ? 'bg-emerald-500/10 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-semibold'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-100 dark:hover:bg-white/5'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
 
-              {NAV_LINKS.map((link, idx) => {
-                const isActive = activeIndex === idx;
-                const isSelected = targetIndex === idx;
-                return (
-                  <Link
-                    key={link.href}
-                    ref={(el) => {
-                      navLinksRef.current[idx] = el;
-                    }}
-                    href={link.href}
-                    onClick={() => {
-                      setClickedIndex(idx);
-                      updateIndicator(idx, true);
-                    }}
-                    className={`relative z-10 px-3.5 py-2 rounded-lg text-[14.5px] font-medium no-underline hover:no-underline transition-colors duration-150 select-none ${
-                      isActive || isSelected
-                        ? 'text-emerald-600 dark:text-[#00bc8c]'
-                        : 'text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-[#00bc8c] hover:bg-slate-100/60 dark:hover:bg-white/5'
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
-            </div>
-
-            {/* Theme Dropdown (Like official Denizen Meta) */}
+            {/* Theme Dropdown */}
             <div className="relative" ref={themeMenuRef}>
               <button
                 type="button"
                 onClick={() => setThemeMenuOpen(!themeMenuOpen)}
-                className={`px-3.5 py-2 rounded-lg text-[14.5px] font-medium flex items-center gap-1.5 transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1.5 transition-all cursor-pointer ${
                   themeMenuOpen
                     ? 'bg-slate-100 dark:bg-white/10 text-slate-900 dark:text-white'
-                    : 'text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-[#00bc8c] hover:bg-slate-100 dark:hover:bg-white/5'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-100 dark:hover:bg-white/5'
                 }`}
               >
                 <span>Theme</span>
@@ -230,7 +139,7 @@ export function Navbar() {
                     }}
                     className={`w-full flex items-center justify-between px-3.5 py-2 text-xs font-medium text-left transition-colors cursor-pointer ${
                       theme === 'dark'
-                        ? 'bg-[#00bc8c]/15 text-[#00bc8c] font-semibold'
+                        ? 'bg-emerald-500/15 text-emerald-400 font-semibold'
                         : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/5'
                     }`}
                   >
@@ -238,7 +147,7 @@ export function Navbar() {
                       <span className="theme-dot theme-dot-emerald"></span>
                       <span>Emerald Dark</span>
                     </div>
-                    {theme === 'dark' && <Check className="w-3.5 h-3.5 text-[#00bc8c]" />}
+                    {theme === 'dark' && <Check className="w-3.5 h-3.5 text-emerald-400" />}
                   </button>
 
                   {/* 3. Graphite Dark */}
@@ -289,8 +198,8 @@ export function Navbar() {
 
           {/* Search bar & Controls */}
           <div className="flex items-center gap-2 flex-1 max-w-sm justify-end">
-            <div className="relative w-full z-[999]" ref={searchContainerRef}>
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-300 pointer-events-none" />
+            <div className="relative w-full max-w-xs z-[999]" ref={searchContainerRef}>
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 dark:text-slate-300 pointer-events-none" />
               <input
                 type="text"
                 placeholder="Search meta..."
@@ -304,9 +213,9 @@ export function Navbar() {
                   if (searchValue.trim()) setIsSearchOpen(true);
                 }}
                 onKeyDown={handleSearchKeyDown}
-                className="w-full pl-9 pr-9 py-2 rounded-xl text-sm bg-slate-100 dark:bg-[#282b32] hover:dark:bg-[#2e323a] focus:dark:bg-[#2e323a] border border-slate-200 dark:border-white/15 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#00bc8c]/40 focus:border-[#00bc8c] transition-all shadow-inner"
+                className="w-full pl-8 pr-8 py-1.5 rounded-xl text-sm bg-slate-100 dark:bg-[#282b32] hover:dark:bg-[#2e323a] focus:dark:bg-[#2e323a] border border-slate-200 dark:border-white/15 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 transition-all shadow-inner"
               />
-              <kbd className="hidden sm:inline-block absolute right-3 top-1/2 -translate-y-1/2 px-1.5 py-0.5 text-[10px] font-semibold text-slate-500 dark:text-slate-200 bg-slate-200 dark:bg-white/15 rounded">
+              <kbd className="hidden sm:inline-block absolute right-2.5 top-1/2 -translate-y-1/2 px-1.5 py-0.2 text-[9px] font-semibold text-slate-500 dark:text-slate-200 bg-slate-200 dark:bg-white/15 rounded">
                 ↵
               </kbd>
 
@@ -340,10 +249,10 @@ export function Navbar() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
+                    className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
                       isActive
-                        ? 'bg-emerald-500/10 dark:bg-[#00bc8c]/15 text-emerald-600 dark:text-[#00bc8c] font-semibold border border-emerald-500/35 dark:border-[#00bc8c]/40'
-                        : 'text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-[#00bc8c] hover:bg-slate-100 dark:hover:bg-white/5 border border-transparent'
+                        ? 'bg-emerald-500/10 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-semibold'
+                        : 'text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-100 dark:hover:bg-white/5'
                     }`}
                   >
                     {link.label}
@@ -376,7 +285,7 @@ export function Navbar() {
                   onClick={() => setTheme('dark')}
                   className={`px-2 py-1 rounded text-xs font-medium flex items-center gap-1.5 cursor-pointer ${
                     theme === 'dark'
-                      ? 'bg-[#00bc8c]/20 text-[#00bc8c] font-semibold border border-[#00bc8c]/40'
+                      ? 'bg-emerald-500/20 text-emerald-400 font-semibold border border-emerald-500/40'
                       : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'
                   }`}
                 >
