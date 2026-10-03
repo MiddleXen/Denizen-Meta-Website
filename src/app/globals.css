@@ -921,9 +921,9 @@ tr {
   -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 18%, black 15%, transparent 75%);
 }
 
-/* 3. Interactive Cursor Spotlight on Grid Outlines */
+/* 3. Interactive Cursor Spotlight on Grid Outlines (Soft, subtle accent) */
 .grid-cursor-lighting {
-  background: radial-gradient(circle 180px at var(--mouse-x, -999px) var(--mouse-y, -999px), rgba(0, 239, 178, 0.35) 0%, transparent 100%);
+  background: radial-gradient(circle 120px at var(--mouse-x, -999px) var(--mouse-y, -999px), rgba(0, 239, 178, 0.12) 0%, rgba(0, 239, 178, 0.03) 60%, transparent 100%);
   mask-image: 
     linear-gradient(to right, black 1px, transparent 1px),
     linear-gradient(to bottom, black 1px, transparent 1px);
@@ -935,11 +935,11 @@ tr {
 }
 
 .theme-graphite .grid-cursor-lighting {
-  background: radial-gradient(circle 180px at var(--mouse-x, -999px) var(--mouse-y, -999px), rgba(56, 189, 248, 0.35) 0%, transparent 100%);
+  background: radial-gradient(circle 120px at var(--mouse-x, -999px) var(--mouse-y, -999px), rgba(56, 189, 248, 0.12) 0%, rgba(56, 189, 248, 0.03) 60%, transparent 100%);
 }
 
 :root:not(.dark) .grid-cursor-lighting {
-  background: radial-gradient(circle 180px at var(--mouse-x, -999px) var(--mouse-y, -999px), rgba(5, 150, 105, 0.22) 0%, transparent 100%);
+  background: radial-gradient(circle 120px at var(--mouse-x, -999px) var(--mouse-y, -999px), rgba(5, 150, 105, 0.08) 0%, transparent 100%);
 }
 
 /* 4. Bottom fade */
@@ -1254,6 +1254,7 @@ tr {
   background-color: rgba(0, 188, 140, 0.12);
   box-shadow: 0 0 10px rgba(0, 188, 140, 0.15);
   will-change: transform, width;
+  contain: layout paint;
   z-index: 1;
 }
 

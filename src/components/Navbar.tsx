@@ -59,8 +59,10 @@ export function Navbar() {
   };
 
   useEffect(() => {
+    if (clickedIndex === null || clickedIndex !== activeIndex) {
+      updateIndicator(activeIndex);
+    }
     setClickedIndex(null);
-    updateIndicator(activeIndex);
   }, [pathname, activeIndex]);
 
   useEffect(() => {
@@ -129,8 +131,8 @@ export function Navbar() {
                   left: 0,
                   opacity: indicatorStyle.opacity,
                   transition: isReady
-                    ? 'transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), width 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.15s ease'
-                    : 'opacity 0.15s ease',
+                    ? 'transform 0.13s cubic-bezier(0.2, 0, 0, 1), width 0.13s cubic-bezier(0.2, 0, 0, 1), opacity 0.1s ease'
+                    : 'opacity 0.1s ease',
                 }}
                 aria-hidden="true"
               />
@@ -149,7 +151,7 @@ export function Navbar() {
                       setClickedIndex(idx);
                       updateIndicator(idx);
                     }}
-                    className={`relative z-10 px-3 py-1.5 rounded-lg text-sm font-medium no-underline hover:no-underline transition-colors duration-150 select-none ${
+                    className={`relative z-10 px-3 py-1.5 rounded-lg text-sm font-medium no-underline hover:no-underline transition-colors duration-100 select-none ${
                       isActive || isSelected
                         ? 'text-emerald-600 dark:text-[#00bc8c]'
                         : 'text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-[#00bc8c] hover:bg-slate-100/60 dark:hover:bg-white/5'
