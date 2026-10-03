@@ -40,19 +40,26 @@ export function Navbar() {
 
   const navLinksRef = useRef<(HTMLAnchorElement | null)[]>([]);
   const navContainerRef = useRef<HTMLDivElement>(null);
+  const hasMountedRef = useRef(false);
 
   const activeIndex = NAV_LINKS.findIndex((link) => pathname.startsWith(link.href));
   const targetIndex = clickedIndex !== null ? clickedIndex : activeIndex;
 
-  const updateIndicator = (index: number) => {
+  const updateIndicator = (index: number, animate = true) => {
     if (index >= 0 && navLinksRef.current[index]) {
       const el = navLinksRef.current[index]!;
-      setIndicatorStyle({
-        left: el.offsetLeft,
-        width: el.offsetWidth,
-        opacity: 1,
-      });
-      setIsReady(true);
+      const left = el.offsetLeft;
+      const width = el.offsetWidth;
+      if (width > 0) {
+        setIndicatorStyle({
+          left,
+          width,
+          opacity: 1,
+        });
+        if (animate && hasMountedRef.current) {
+          setIsReady(true);
+        }
+      }
     } else {
       setIndicatorStyle((prev) => ({ ...prev, opacity: 0 }));
     }
@@ -60,13 +67,25 @@ export function Navbar() {
 
   useEffect(() => {
     setClickedIndex(null);
-    updateIndicator(activeIndex);
+    if (!hasMountedRef.current) {
+      updateIndicator(activeIndex, false);
+      const id1 = requestAnimationFrame(() => {
+        const id2 = requestAnimationFrame(() => {
+          hasMountedRef.current = true;
+          setIsReady(true);
+        });
+        return () => cancelAnimationFrame(id2);
+      });
+      return () => cancelAnimationFrame(id1);
+    } else {
+      updateIndicator(activeIndex, true);
+    }
   }, [pathname, activeIndex]);
 
   useEffect(() => {
     const handleResize = () => {
       const current = clickedIndex !== null ? clickedIndex : activeIndex;
-      updateIndicator(current);
+      updateIndicator(current, false);
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -105,7 +124,7 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full bg-white/90 dark:bg-[#222222]/90 backdrop-blur-md border-b border-slate-200 dark:border-white/10 shadow-xs">
       <div className="max-w-[1550px] mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between h-16 gap-3">
+        <div className="flex items-center justify-between h-[4.25rem] sm:h-[4.5rem] gap-3">
           {/* Logo / Brand */}
           <Link href="/" className="flex items-center flex-shrink-0 no-underline hover:no-underline">
             <span className="font-bold text-base sm:text-lg tracking-tight text-slate-900 dark:text-white hover:text-emerald-500 dark:hover:text-[#00bc8c] transition-colors no-underline">
@@ -125,7 +144,7 @@ export function Navbar() {
                 style={{
                   transform: `translate3d(${indicatorStyle.left}px, -50%, 0)`,
                   width: `${indicatorStyle.width}px`,
-                  height: '38px',
+                  height: '40px',
                   left: 0,
                   opacity: indicatorStyle.opacity,
                   transition: isReady
@@ -147,7 +166,7 @@ export function Navbar() {
                     href={link.href}
                     onClick={() => {
                       setClickedIndex(idx);
-                      updateIndicator(idx);
+                      updateIndicator(idx, true);
                     }}
                     className={`relative z-10 px-3.5 py-2 rounded-lg text-[14.5px] font-medium no-underline hover:no-underline transition-colors duration-150 select-none ${
                       isActive || isSelected

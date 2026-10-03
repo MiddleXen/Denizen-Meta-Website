@@ -86,6 +86,8 @@ export const ASYNC_SAFE_ALL_OBJECT_TYPES = new Set<string>([
   'scripttag', 'script',
   'secrettag', 'secret',
   'timetag', 'time',
+  'enchantmenttag', 'enchantment',
+  'materialtag', 'material',
   // Queue & script execution memory tags
   'definition', 'def', 'context', 'entry', 'proc', 'static', 'tern',
 ]);
@@ -103,12 +105,7 @@ export const COLOR_FORMATTING_TAGS = new Set<string>([
 ]);
 
 // Types that are safe with minor exceptions
-export const ASYNC_UNSAFE_EXCEPTIONS: Record<string, Set<string>> = {
-  enchantmenttag: new Set(['full_name', 'can_enchant']),
-  enchantment: new Set(['full_name', 'can_enchant']),
-  materialtag: new Set(['is_enabled']),
-  material: new Set(['is_enabled']),
-};
+export const ASYNC_UNSAFE_EXCEPTIONS: Record<string, Set<string>> = {};
 
 // Object types with specific sub-tags marked safe off-thread
 export const ASYNC_SAFE_SUBTAGS: Record<string, Set<string>> = {
@@ -199,6 +196,7 @@ export const ASYNC_SAFE_SUBTAGS: Record<string, Set<string>> = {
     'online_players', 'online_players_flagged', 'ops', 'has_whitelist',
     'whitelisted_players', 'banned_players', 'banned_addresses', 'is_banned',
     'match_player', 'match_offline_player', 'potion_effect_types',
+    'color_names',
   ]),
 };
 

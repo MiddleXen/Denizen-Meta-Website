@@ -278,6 +278,113 @@ table td {
   word-break: break-word;
 }
 
+table td a {
+  color: var(--link-color) !important;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+table td a:hover {
+  color: var(--link-hover) !important;
+  text-decoration: underline;
+}
+
+/* Returns Link Badge - Distinct Typed Format */
+table td a[href^="/Docs/ObjectTypes/"] {
+  display: inline-flex;
+  align-items: center;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0.12rem 0.55rem;
+  border-radius: 6px;
+  background-color: rgba(0, 188, 140, 0.12);
+  border: 1px solid rgba(0, 188, 140, 0.28);
+  color: #00bc8c !important;
+  text-decoration: none !important;
+  transition: all 0.15s ease;
+}
+
+table td a[href^="/Docs/ObjectTypes/"]:hover {
+  background-color: rgba(0, 188, 140, 0.22);
+  border-color: rgba(0, 188, 140, 0.5);
+  color: #00efb2 !important;
+  text-decoration: none !important;
+}
+
+.theme-black table td a[href^="/Docs/ObjectTypes/"] {
+  background-color: rgba(0, 239, 178, 0.1) !important;
+  border-color: rgba(0, 239, 178, 0.3) !important;
+  color: #00efb2 !important;
+}
+
+.theme-black table td a[href^="/Docs/ObjectTypes/"]:hover {
+  background-color: rgba(0, 239, 178, 0.2) !important;
+  border-color: rgba(0, 239, 178, 0.55) !important;
+}
+
+.theme-graphite table td a[href^="/Docs/ObjectTypes/"] {
+  background-color: rgba(56, 189, 248, 0.1) !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+  color: #38bdf8 !important;
+}
+
+.theme-graphite table td a[href^="/Docs/ObjectTypes/"]:hover {
+  background-color: rgba(56, 189, 248, 0.2) !important;
+  border-color: rgba(56, 189, 248, 0.55) !important;
+}
+
+:root:not(.dark) table td a[href^="/Docs/ObjectTypes/"] {
+  background-color: rgba(5, 150, 105, 0.08) !important;
+  border-color: rgba(5, 150, 105, 0.25) !important;
+  color: #047857 !important;
+}
+
+:root:not(.dark) table td a[href^="/Docs/ObjectTypes/"]:hover {
+  background-color: rgba(5, 150, 105, 0.15) !important;
+}
+
+/* Generated Example Highlighting */
+abbr[title*="Generated Example"],
+abbr[title*="Generated Examples"] {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 600;
+  color: #d97706 !important;
+  text-decoration: none !important;
+  cursor: help;
+}
+
+.dark abbr[title*="Generated Example"],
+.dark abbr[title*="Generated Examples"] {
+  color: #fbbf24 !important;
+}
+
+.theme-black abbr[title*="Generated Example"],
+.theme-black abbr[title*="Generated Examples"] {
+  color: #facc15 !important;
+}
+
+.theme-graphite abbr[title*="Generated Example"],
+.theme-graphite abbr[title*="Generated Examples"] {
+  color: #fbbf24 !important;
+}
+
+td:has(abbr[title*="Generated Example"]) + td pre,
+tr.slightly_smaller_text pre,
+tr.smaller_text pre {
+  border-color: rgba(245, 158, 11, 0.28) !important;
+  background-color: rgba(245, 158, 11, 0.03) !important;
+}
+
+.dark td:has(abbr[title*="Generated Example"]) + td pre,
+.dark tr.slightly_smaller_text pre,
+.dark tr.smaller_text pre {
+  border-color: rgba(251, 191, 36, 0.25) !important;
+  background-color: rgba(251, 191, 36, 0.04) !important;
+}
+
 table td:nth-child(2) {
   width: calc(100% - 150px) !important;
   word-break: break-word;
@@ -293,12 +400,13 @@ table td:nth-child(2) {
   font-weight: 600;
   vertical-align: top;
   border-right: 1px solid var(--row-border);
-  color: #475569;
+  color: #047857;
+  letter-spacing: 0.01em;
   user-select: none;
 }
 
 .dark .td-doc-key {
-  color: #94a3b8;
+  color: #34d399 !important;
 }
 
 tr.table-primary {
@@ -404,10 +512,10 @@ a.group, a.group *, a.group:hover, a.group:hover * {
 
 .categories_wrapper {
   margin: 1rem auto 1.75rem auto;
-  max-width: 1200px;
+  max-width: 95%;
   width: fit-content;
-  min-width: min(300px, 92%);
-  padding: 0.85rem 1.25rem;
+  min-width: auto;
+  padding: 0.75rem 1.25rem;
   background-color: rgba(0, 0, 0, 0.02);
   border: 1px solid var(--row-border);
   border-radius: 16px;
@@ -634,6 +742,32 @@ a.group, a.group *, a.group:hover, a.group:hover * {
   animation: fadeIn 0.3s ease-out both;
 }
 
+/* Fast, GPU-accelerated page entry with subtle book-turn perspective */
+@keyframes bookPageTurn {
+  0% {
+    opacity: 0;
+    transform: perspective(1400px) rotateY(-2.2deg) translateX(10px) scale(0.996);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(1400px) rotateY(0deg) translateX(0) scale(1);
+  }
+}
+
+.page-transition {
+  transform-origin: 0% 25%;
+  animation: bookPageTurn 0.24s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-transition {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+
 /* Stagger utilities for cards on homepage */
 .stagger-1 { animation-delay: 0.03s; }
 .stagger-2 { animation-delay: 0.06s; }
@@ -675,12 +809,14 @@ tr {
 
 .theme-black .td-doc-key {
   border-right-color: #1a1a20 !important;
-  color: #cbd5e1 !important;
+  color: #00efb2 !important;
+  font-weight: 600 !important;
 }
 
 .theme-graphite .td-doc-key {
   border-right-color: #27272a !important;
-  color: #e2e8f0 !important;
+  color: #7dd3fc !important;
+  font-weight: 600 !important;
 }
 
 .theme-black tr.table-primary {

@@ -1,8 +1,7 @@
 import { Metadata } from 'next';
-import { getMetaDocs, handleMetaPage } from '@/lib/meta-store';
+import { loadDocPage } from '@/lib/doc-pages';
 import { fixID } from '@/lib/util';
 import { DocPageLayout } from '@/components/DocPageLayout';
-import { MetaEventObject } from '@/lib/types';
 
 interface PageProps {
   params: Promise<{ id?: string[] }>;
@@ -22,19 +21,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function EventsPage({ params }: PageProps) {
   const { id: idParts } = await params;
   const id = fixID(idParts ? idParts.join('/') : null);
-  const docs = await getMetaDocs();
-  const eventList = Object.values(docs.events);
-
-  const getExtraEvents = (current: MetaEventObject[]): MetaEventObject[] | null => {
-    if (current.length > 0 || !id) return null;
-    const clean = id.toLowerCase();
-    const matches = eventList.filter((e) =>
-      e.cleanEvents.some((ce) => ce.includes(clean))
-    );
-    return matches.length > 0 ? matches : null;
-  };
-
-  const model = handleMetaPage(eventList, id, getExtraEvents);
+  const { model, restUrl } = await loadDocPage('Events', id || null);
 
   return (
     <DocPageLayout
@@ -52,6 +39,7 @@ export default async function EventsPage({ params }: PageProps) {
       itemPlural="events"
       basePath="/Docs/Events"
       model={model}
+      restUrl={restUrl}
     />
   );
 }

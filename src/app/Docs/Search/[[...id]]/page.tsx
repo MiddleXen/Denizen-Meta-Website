@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { getMetaDocs, handleGlobalSearch } from '@/lib/meta-store';
+import { loadDocPage } from '@/lib/doc-pages';
 import { fixID } from '@/lib/util';
 import { DocPageLayout } from '@/components/DocPageLayout';
 
@@ -21,22 +21,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function SearchPage({ params }: PageProps) {
   const { id: idParts } = await params;
   const id = fixID(idParts ? idParts.join('/') : null) || '';
-  const docs = await getMetaDocs();
-
-  const model = handleGlobalSearch(docs.allObjects, id);
+  const { model, restUrl } = await loadDocPage('Search', id || null);
 
   return (
     <DocPageLayout
       title="Global Meta Documentation Search"
       description={
         <>
-          Search across all {docs.allObjects.length.toLocaleString()} commands, tags, events, mechanisms, actions, languages, and object types.
+          Search across all {model.max.toLocaleString()} commands, tags, events, mechanisms, actions, languages, and object types.
         </>
       }
       searchPlaceholder="Search all meta documentation..."
       itemPlural="meta-documentation entries"
       basePath="/Docs/Search"
       model={model}
+      restUrl={restUrl}
     />
   );
 }

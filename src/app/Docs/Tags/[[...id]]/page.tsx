@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
-import { getMetaDocs, handleMetaPage } from '@/lib/meta-store';
-import { cleanTag, fixID } from '@/lib/util';
+import { loadDocPage } from '@/lib/doc-pages';
+import { fixID } from '@/lib/util';
 import { DocPageLayout } from '@/components/DocPageLayout';
 
 interface PageProps {
@@ -21,11 +21,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function TagsPage({ params }: PageProps) {
   const { id: idParts } = await params;
   const id = fixID(idParts ? idParts.join('/') : null);
-  const search = id ? cleanTag(id) : null;
-  const docs = await getMetaDocs();
-  const tagList = Object.values(docs.tags);
-
-  const model = handleMetaPage(tagList, search);
+  const { model, restUrl } = await loadDocPage('Tags', id || null);
 
   return (
     <DocPageLayout
@@ -43,6 +39,7 @@ export default async function TagsPage({ params }: PageProps) {
       itemPlural="tags"
       basePath="/Docs/Tags"
       model={model}
+      restUrl={restUrl}
     />
   );
 }

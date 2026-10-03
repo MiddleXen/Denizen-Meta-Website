@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { getMetaDocs, handleMetaPage } from '@/lib/meta-store';
+import { loadDocPage } from '@/lib/doc-pages';
 import { fixID } from '@/lib/util';
 import { DocPageLayout } from '@/components/DocPageLayout';
 
@@ -21,10 +21,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function LanguagesPage({ params }: PageProps) {
   const { id: idParts } = await params;
   const id = fixID(idParts ? idParts.join('/') : null);
-  const docs = await getMetaDocs();
-  const langList = Object.values(docs.languages);
-
-  const model = handleMetaPage(langList, id);
+  const { model, restUrl } = await loadDocPage('Languages', id || null);
 
   return (
     <DocPageLayout
@@ -40,6 +37,7 @@ export default async function LanguagesPage({ params }: PageProps) {
       itemPlural="language explanations"
       basePath="/Docs/Languages"
       model={model}
+      restUrl={restUrl}
     />
   );
 }

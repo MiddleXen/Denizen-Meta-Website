@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { getMetaDocs, handleMetaPage } from '@/lib/meta-store';
+import { loadDocPage } from '@/lib/doc-pages';
 import { fixID } from '@/lib/util';
 import { DocPageLayout } from '@/components/DocPageLayout';
 
@@ -21,10 +21,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function CommandsPage({ params }: PageProps) {
   const { id: idParts } = await params;
   const id = fixID(idParts ? idParts.join('/') : null);
-  const docs = await getMetaDocs();
-  const commandList = Object.values(docs.commands);
-
-  const model = handleMetaPage(commandList, id);
+  const { model, restUrl } = await loadDocPage('Commands', id || null);
 
   return (
     <DocPageLayout
@@ -42,6 +39,7 @@ export default async function CommandsPage({ params }: PageProps) {
       itemPlural="commands"
       basePath="/Docs/Commands"
       model={model}
+      restUrl={restUrl}
     />
   );
 }

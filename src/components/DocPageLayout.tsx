@@ -1,7 +1,8 @@
 import React from 'react';
-import { DocViewModel } from '@/lib/types';
 import { DocSearchBar } from './DocSearchBar';
+import { DocRestLoader } from './DocRestLoader';
 import { Sparkles } from 'lucide-react';
+import type { SplitDocModel } from '@/lib/doc-pages';
 
 interface DocPageLayoutProps {
   title: string;
@@ -9,7 +10,8 @@ interface DocPageLayoutProps {
   searchPlaceholder: string;
   itemPlural: string;
   basePath: string;
-  model: DocViewModel;
+  model: SplitDocModel;
+  restUrl: string | null;
 }
 
 export function DocPageLayout({
@@ -19,6 +21,7 @@ export function DocPageLayout({
   itemPlural,
   basePath,
   model,
+  restUrl,
 }: DocPageLayoutProps) {
   return (
     <div className="w-full pb-16">
@@ -61,10 +64,10 @@ export function DocPageLayout({
         </div>
       </div>
 
-      <div
-        className="w-full max-w-[1550px] mx-auto px-2 sm:px-4 relative z-0"
-        dangerouslySetInnerHTML={{ __html: model.contentHtml }}
-      />
+      <div className="w-full max-w-[1550px] mx-auto px-2 sm:px-4 relative z-0">
+        <div dangerouslySetInnerHTML={{ __html: model.headHtml }} />
+        {restUrl && <DocRestLoader key={restUrl} url={restUrl} />}
+      </div>
     </div>
   );
 }
